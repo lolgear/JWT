@@ -164,8 +164,22 @@
         }
         
         if (builder.withKeyTypeEC) {
+            {
+                // try decode.
+                NSData *privateKeyData = [JWTCryptoSecurity__ASN1__Coder decodedItemsFromData:data isPublic:YES error:nil][[JWTCryptoSecurity__ASN1__Coder parametersKeyPublicKeyData]];
+                NSError *thisError = nil;
+                SecKeyRef ref;
+                if (privateKeyData) {
+                    ref = [JWTCryptoSecurity addKeyWithData:privateKeyData asPublic:YES tag:self.tag type:[self extractedSecKeyTypeWithParameters:parameters] error:&thisError];
+                }
+                if (!thisError && ref) {
+                    // ok!
+                }
+                NSLog(@"thisError: %@ SecKeyRef: %@", thisError, ref);
+            }
+            
             NSError *theError = nil;
-            keyData = [JWTCryptoSecurity dataByExtractingKeyFromANS1:data error:&theError];
+            keyData = [JWTCryptoSecurity dataByExtractingPublicKeyFromANS1:data error:&theError];
             if (!keyData || theError) {
                 if (error && theError != nil) {
                     *error = theError;
@@ -248,23 +262,52 @@
         NSData *theData = [data copy];
         JWTCryptoKeyBuilder *builder = [self extractedBuilderWithParameters:parameters];
         if (builder.withKeyTypeEC) {
+            SecKeyRef privateKeyRef = NULL;
+            {
+                // try decode.
+                NSData *privateKeyData = [JWTCryptoSecurity__ASN1__Coder decodedItemsFromData:theData isPublic:NO error:nil][[JWTCryptoSecurity__ASN1__Coder parametersKeyPrivateKeyData]];
+                NSError *thisError = nil;
+                SecKeyRef ref = NULL;
+                if (privateKeyData) {
+                    ref = [JWTCryptoSecurity addKeyWithData:privateKeyData asPublic:NO tag:self.tag type:[self extractedSecKeyTypeWithParameters:parameters] error:&thisError];
+                }
+                if (!thisError && ref) {
+                    // ok!
+                    privateKeyRef = ref;
+                    theData = privateKeyData;
+                }
+                NSLog(@"thisError: %@ SecKeyRef: %@", thisError, ref);
+            }
             // cheat and shit!
             // ahaha. try to find correct key here.
             // possible soultion - dataByExtracting in cryptoKeySecurity.
-            while (/* DISABLES CODE */ (0) && theData != nil && theData.length > 0) {
-                NSError *theError = nil;
-                self.key = [JWTCryptoSecurity addKeyWithData:theData asPublic:NO tag:self.tag type:[self extractedSecKeyTypeWithParameters:parameters] error:&theError];
-                NSLog(@"theData: %@", theData);
-                NSLog(@"theError: %@", theError);
-                if (!theError && self.key) {
-                    NSLog(@"Found!");
+            if (!privateKeyRef) {
+                theData = [JWTCryptoSecurity dataByExtractingPrivateKeyFromANS1:theData error:nil];
+                BOOL startFound = NO;
+                while (theData != nil && theData.length > 0) {
+                    NSError *theError = nil;
+                    self.key = [JWTCryptoSecurity addKeyWithData:theData asPublic:NO tag:self.tag type:[self extractedSecKeyTypeWithParameters:parameters] error:&theError];
                     NSLog(@"theData: %@", theData);
-                    NSLog(@"theKey: %@", self.key);
-                    break;
+                    NSLog(@"theError: %@", theError);
+                    if (!theError && self.key) {
+                        NSLog(@"Found!");
+                        NSLog(@"theData: %@", theData);
+                        NSLog(@"theKey: %@", self.key);
+                        startFound = YES;
+                        // try to cut down the size from back.
+                        break;
+                    }
+                    if (!startFound) {
+                        NSUInteger length = theData.length - 1;
+                        NSRange range = NSMakeRange(1, length);
+                        theData = [NSData dataWithBytes:((char *)theData.bytes) + range.location length:range.length];
+                    }
+                    else {
+                        NSUInteger length = theData.length - 1;
+                        NSRange range = NSMakeRange(0, length);
+                        theData = [NSData dataWithBytes:((char *)theData.bytes) + range.location length:range.length];
+                    }
                 }
-                NSUInteger length = theData.length - 1;
-                NSRange range = NSMakeRange(1, length);
-                theData = [NSData dataWithBytes:((char *)theData.bytes) + range.location length:range.length];
             }
         }
         
