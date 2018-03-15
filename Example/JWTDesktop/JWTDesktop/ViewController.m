@@ -176,6 +176,105 @@
     // maybe add contstraints.
 }
 
+- (void)signWithES {
+    // OK, I understand this :3
+    // From apple.
+//    {
+//        NSString *privateKey = @"MIGTAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBHkwdwIBAQQgpnX9ZXmgLCWQ+Hkpvae2PLU68XEzJdp+NjswuBS9RHWgCgYIKoZIzj0DAQehRANCAARMSO6bkKjLT+9Mx9wJRXoqUx+CbeOhAbVGS+3fgvVNGv3QM3NlMou3uguMrITwVvpWjuocXbSzjTwMstMMjsZg";
+//        [self signWithESKey:privateKey];
+//    }
+    
+    {
+        NSString *privateKey = @"MHcCAQEEIA8psOaEu6n1SvOXBCyjkDXkWzX+hptNeNiZgtJ9RRGboAoGCCqGSM49AwEHoUQDQgAE/P6z/08kaIfmyJQZhjmGMIP4QEwuVHlmO3ztd5S5LOLw4lSlo/3xTFMMmLFyy1delAoFJAMWzbPoI5GJQYmIWQ";
+        [self signWithESKey:privateKey];
+    }
+    
+    // we should retrieve RAW bit content.
+    // passed, ok.
+    // IT IS Public key.
+//    {
+//        NSString *publicKey = @"MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE/P6z/08kaIfmyJQZhjmGMIP4QEwuVHlmO3ztd5S5LOLw4lSlo/3xTFMMmLFyy1delAoFJAMWzbPoI5GJQYmIWQ";
+//        [self verifyWithESKey:publicKey];
+//    }
+}
+- (void)verifyWithESKey:(NSString *)key {
+    NSError *error = nil;
+    JWTCryptoKey *cryptoKey = [[JWTCryptoKeyPublic alloc] initWithPemEncoded:key parameters:@{[JWTCryptoKey parametersKeyBuilder] : [JWTCryptoKeyBuilder new].keyTypeEC} error:&error];
+    NSLog(@"key: %@ error: %@", cryptoKey, error);
+}
+- (void)signWithESKey:(NSString *)key
+{
+//    NSString *algorithmName = @"ES256";
+    NSError *error = nil;
+    JWTCryptoKeyPrivate *cryptoKey = [[JWTCryptoKeyPrivate alloc] initWithPemEncoded:key parameters:@{[JWTCryptoKey parametersKeyBuilder] : [JWTCryptoKeyBuilder new].keyTypeEC} error:&error];
+    NSLog(@"key: %@ error: %@", cryptoKey, error);
+//    id <JWTAlgorithmDataHolderProtocol> signDataHolder = [JWTAlgorithmRSFamilyDataHolder new]
+//    .keyExtractorType([JWTCryptoKeyExtractor privateKeyWithPEMBase64].type)
+//    .algorithmName(algorithmName)
+//    .secret(privateKey);
+    
+    
+    // sign
+//    NSDictionary *payloadDictionary = @{ @"hello": @"world" };
+    
+//    JWTCodingBuilder *signBuilder = [JWTEncodingBuilder encodePayload:payloadDictionary].addHolder(signDataHolder);
+//    JWTCodingResultType *signResult = signBuilder.result;
+//    NSString *token = nil;
+//    if (signResult.successResult) {
+//        // success
+//        NSLog(@"%@ success: %@", self.debugDescription, signResult.successResult.encoded);
+//        token = signResult.successResult.encoded;
+//    } else {
+//        // error
+//        NSLog(@"%@ error: %@", self.debugDescription, signResult.errorResult.error);
+//    }
+//
+//    // verify
+//    if (token == nil) {
+//        NSLog(@"something wrong");
+//    }
+}
+
+- (void)trueSign:(NSString *)signKey andVerify:(NSString *)verifyKey {
+    NSString *publicKeyData = verifyKey;
+    NSString *privateKeyData = signKey;
+    JWTCryptoKeyPrivate *privateKey = [[JWTCryptoKeyPrivate alloc] initWithBase64String:privateKeyData parameters:@{[JWTCryptoKey parametersKeyBuilder] : [JWTCryptoKeyBuilder new].keyTypeEC} error:nil];
+    JWTCryptoKeyPublic *publicKey = [[JWTCryptoKeyPublic alloc] initWithBase64String:publicKeyData parameters:@{[JWTCryptoKey parametersKeyBuilder] : [JWTCryptoKeyBuilder new].keyTypeEC} error:nil];
+    
+    NSString *algorithmName = @"ES256";
+    id <JWTAlgorithmDataHolderProtocol> holder = [JWTAlgorithmRSFamilyDataHolder new]
+    .verifyKey(publicKey)
+    .signKey(privateKey)
+    .algorithmName(algorithmName);
+    
+    NSDictionary *thePayload = @{@"hello": @"world"};
+    
+    JWTCodingBuilder *signBuilder = [JWTEncodingBuilder encodePayload:thePayload].addHolder(holder);
+    JWTCodingResultType *signResult = signBuilder.result;
+    
+    NSString *token = nil;
+    if (signResult.successResult) {
+        // success
+        NSLog(@"%@ success: %@", self.debugDescription, signResult.successResult.encoded);
+        token = signResult.successResult.encoded;
+    } else {
+        // error
+        NSLog(@"%@ error: %@", self.debugDescription, signResult.errorResult.error);
+    }
+}
+
+- (void)trueSignAndVerify {
+    NSString *publicKeyData = @"MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE/P6z/08kaIfmyJQZhjmGMIP4QEwuVHlmO3ztd5S5LOLw4lSlo/3xTFMMmLFyy1delAoFJAMWzbPoI5GJQYmIWQ";
+    NSString *privateKeyData = @"MIGTAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBHkwdwIBAQQgpnX9ZXmgLCWQ+Hkpvae2PLU68XEzJdp+NjswuBS9RHWgCgYIKoZIzj0DAQehRANCAARMSO6bkKjLT+9Mx9wJRXoqUx+CbeOhAbVGS+3fgvVNGv3QM3NlMou3uguMrITwVvpWjuocXbSzjTwMstMMjsZg";
+    
+    // Yes, we extract sign and verify keys from one privateKey.
+    [self trueSign:privateKeyData andVerify:privateKeyData];
+}
+
+- (void)test {
+//    [self signWithES];
+    [self trueSignAndVerify];
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setupModel];
@@ -184,6 +283,7 @@
     [self setupDecriptedViews];
     [self defaultDataSetup];
     [self refreshUI];
+    [self test];
     // Do any additional setup after loading the view.
 }
 - (void)defaultDataSetup {
