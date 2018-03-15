@@ -1,0 +1,71 @@
+---
+:name: ES384
+:private: |
+  -----BEGIN EC PARAMETERS-----
+  BgUrgQQAIg==
+  -----END EC PARAMETERS-----
+  -----BEGIN EC PRIVATE KEY-----
+  MIGkAgEBBDDxOljqUKw9YNhkluSJIBAYO1YXcNtS+vckd5hpTZ5toxsOlwbmyrnU
+  Tn+D5Xma1m2gBwYFK4EEACKhZANiAASQwYTiRvXu1hMHceSosMs/8uf50sJI3jvK
+  kdSkvuRAPxSzhtrUvCQDnVsThFq4aOdZZY1qh2ErJGtzmrx+pEsJvJnvfOTG3NGU
+  KRalek+LQfVqAUSvDMKlxdkz2e67tso=
+  -----END EC PRIVATE KEY-----
+:public: |
+  -----BEGIN PUBLIC KEY-----
+  MHYwEAYHKoZIzj0CAQYFK4EEACIDYgAEkMGE4kb17tYTB3HkqLDLP/Ln+dLCSN47
+  ypHUpL7kQD8Us4ba1LwkA51bE4RauGjnWWWNaodhKyRrc5q8fqRLCbyZ73zkxtzR
+  lCkWpXpPi0H1agFErwzCpcXZM9nuu7bK
+  -----END PUBLIC KEY-----
+:token: eyJhbGciOiJFUzM4NCJ9.eyJ1c2VyX2lkIjoic29tZUB1c2VyLnRsZCJ9.EY2F14rMpKILHVuApDfRjcUI-eHIIi8uAiyxZ2ySbDHbOihK8UNTH8s91OUwqS5IG1cts0HNPBUlu4k7xC5kFT9Vm41ITrIyAoyZu4VLjssFeiLrmuxZIfaxMNlGsXWC
+:header: ES384
+:jwt_payload: '{"user_id"=>"some@user.tld"}'
+
+
+
+
+---
+:name: ES512
+:private: |
+  -----BEGIN EC PARAMETERS-----
+  BgUrgQQAIw==
+  -----END EC PARAMETERS-----
+  -----BEGIN EC PRIVATE KEY-----
+  MIHcAgEBBEIB0/+ffxEj7j62xvGaB5pvzk888e412ESO/EK/K0QlS9dSF8+Rj1rG
+  zqpRB8fvDnoe8xdmkW/W5GKzojMyv7YQYumgBwYFK4EEACOhgYkDgYYABAEw74Yw
+  aTbPY6TtWmxx6LJDzCX2nKWCPnKdZcEH9Ncu8g5RjRBRq2yacja3OoS6nA2YeDng
+  reBJxZr376P6Ns6XcQFWDA6K/MCTrEBCsPxXZNxd8KR9vMGWhgNtWRrcKzwJfQkr
+  suyehZkbbYyFnAWyARKHZuV7VUXmeEmRS/f93MPqVA==
+  -----END EC PRIVATE KEY-----
+:public: |
+  -----BEGIN PUBLIC KEY-----
+  MIGbMBAGByqGSM49AgEGBSuBBAAjA4GGAAQBMO+GMGk2z2Ok7VpsceiyQ8wl9pyl
+  gj5ynWXBB/TXLvIOUY0QUatsmnI2tzqEupwNmHg54K3gScWa9++j+jbOl3EBVgwO
+  ivzAk6xAQrD8V2TcXfCkfbzBloYDbVka3Cs8CX0JK7LsnoWZG22MhZwFsgESh2bl
+  e1VF5nhJkUv3/dzD6lQ=
+  -----END PUBLIC KEY-----
+:token: eyJhbGciOiJFUzUxMiJ9.eyJ1c2VyX2lkIjoic29tZUB1c2VyLnRsZCJ9.AMyTBFH3StLPEaecQvRlTK7UuDY6ZpxdM6s14sYO7lJ15nHvUOBvCG5a92bjR4mWYkQC1RVHKeUh8EVHEhKxai7JAUHCxLeYp5PPitzi30J4lqfbowIn_Jk0D9WTROFt4wBKVsgancerACQKeKvIda0bGZY7t5UgCrNOIYs7vjBiEqF7
+:header: ES512
+:jwt_payload: '{"user_id"=>"some@user.tld"}'
+
+
+
+
+---
+:name: ES256
+:private: |
+  -----BEGIN EC PARAMETERS-----
+  BggqhkjOPQMBBw==
+  -----END EC PARAMETERS-----
+  -----BEGIN EC PRIVATE KEY-----
+  MHcCAQEEIJmVse5uPfj6B4TcXrUAvf9/8pJh+KrKKYLNcmOnp/vPoAoGCCqGSM49
+  AwEHoUQDQgAEAr+WbDE5VtIDGhtYMxvEc6cMsDBc/DX1wuhIMu8dQzOLSt0tpqK9
+  MVfXbVfrKdayVFgoWzs8MilcYq0QIhKx/w==
+  -----END EC PRIVATE KEY-----
+:public: |
+  -----BEGIN PUBLIC KEY-----
+  MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEAr+WbDE5VtIDGhtYMxvEc6cMsDBc
+  /DX1wuhIMu8dQzOLSt0tpqK9MVfXbVfrKdayVFgoWzs8MilcYq0QIhKx/w==
+  -----END PUBLIC KEY-----
+:token: eyJhbGciOiJFUzI1NiJ9.eyJ1c2VyX2lkIjoic29tZUB1c2VyLnRsZCJ9.QjJQBWmjldajUZV6csoMRVBvMgyjyttHDz7kT439Nd7rWjj4z76wXkarrizpECnv4eptCjr2Oh27s5IfGjAN5A
+:header: ES256
+:jwt_payload: '{"user_id"=>"some@user.tld"}'
