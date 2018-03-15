@@ -79,6 +79,14 @@
             holder = [JWTAlgorithmRSFamilyDataHolder new].verifyKey(key).algorithmName(algorithmName).secretData([NSData new]);
         }
     }
+    else if ([algorithm.name hasPrefix:@"ES"]) {
+        NSError *keyError = nil;
+        id<JWTCryptoKeyProtocol>key = [[JWTCryptoKeyPublic alloc] initWithPemEncoded:secret parameters:@{[JWTCryptoKey parametersKeyBuilder] : [[JWTCryptoKeyBuilder new] keyTypeEC]} error:&keyError];
+        theError = keyError;
+        if (!theError) {
+            holder = [JWTAlgorithmRSFamilyDataHolder new].verifyKey(key).algorithmName(algorithmName).secretData([NSData new]);
+        }
+    }
     else if ([algorithm isKindOfClass:[JWTAlgorithmHSBase class]]){
         JWTAlgorithmHSFamilyDataHolder *aHolder = [JWTAlgorithmHSFamilyDataHolder new];
         if (isBase64EncodedSecret && secretData) {

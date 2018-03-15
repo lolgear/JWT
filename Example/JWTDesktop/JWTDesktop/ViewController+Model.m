@@ -69,7 +69,8 @@
 + (instancetype)defaultDataSeed {
     return
 //    [self RS256];
-    [self RS256__Corrupted_2];
+//    [self RS256__Corrupted_2];
+    [self ES256];
 }
 
 + (instancetype)RS256 {
@@ -109,6 +110,13 @@
     NSString *token = @"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWV9.EkN-DOsnsuRjRO6BxXemmJDm3HbxrbRzXglbN2S4sOkopdU4IsDxTI8jO19W_A4K8ZPJijNLis4EZsHeY559a4DFOd50_OqgHGuERTqYZyuhtF39yxJPAjUESwxk2J5k_4zM3O-vtd1Ghyo4IbqKKSy6J9mTniYJPenn5-HIirE";
     NSString *secret = @"MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDdlatRjRjogo3WojgGHFHYLugdUWAY9iR3fy4arWNA1KoS8kVw33cJibXr8bvwUAUparCwlvdbH6dvEOfou0/gCFQsHUfQrSDv+MuSUMAe8jzKE4qW+jK+xQU9a03GUnKHkkle+Q0pX/g6jXZ7r1/xAK5Do2kQ+X5xK9cipRgEKwIDAQAB";
     NSString *algorithmName = JWTAlgorithmNameRS256;
+    return [[self alloc] initWithAlgorithName:(NSString *)algorithmName secret:(NSString *)secret token:(NSString *)token];
+}
+
++ (instancetype)ES256 {
+    NSString *token = @"eyJhbGciOiJFUzI1NiJ9.eyJ1c2VyX2lkIjoic29tZUB1c2VyLnRsZCJ9.QjJQBWmjldajUZV6csoMRVBvMgyjyttHDz7kT439Nd7rWjj4z76wXkarrizpECnv4eptCjr2Oh27s5IfGjAN5A";
+    NSString *secret = @"MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEAr+WbDE5VtIDGhtYMxvEc6cMsDBc/DX1wuhIMu8dQzOLSt0tpqK9MVfXbVfrKdayVFgoWzs8MilcYq0QIhKx/w";
+    NSString *algorithmName = JWTAlgorithmNameES256;
     return [[self alloc] initWithAlgorithName:(NSString *)algorithmName secret:(NSString *)secret token:(NSString *)token];
 }
 @end

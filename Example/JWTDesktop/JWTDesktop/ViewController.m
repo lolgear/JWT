@@ -268,7 +268,7 @@
     NSString *privateKeyData = @"MIGTAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBHkwdwIBAQQgpnX9ZXmgLCWQ+Hkpvae2PLU68XEzJdp+NjswuBS9RHWgCgYIKoZIzj0DAQehRANCAARMSO6bkKjLT+9Mx9wJRXoqUx+CbeOhAbVGS+3fgvVNGv3QM3NlMou3uguMrITwVvpWjuocXbSzjTwMstMMjsZg";
     
     // Yes, we extract sign and verify keys from one privateKey.
-    [self trueSign:privateKeyData andVerify:privateKeyData];
+//    [self trueSign:privateKeyData andVerify:privateKeyData];
 }
 
 - (void)test {
