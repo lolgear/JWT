@@ -35,5 +35,15 @@
 
 @interface JWTCryptoSecurity (PublicKey)
 + (NSData *)dataByRemovingPublicKeyHeader:(NSData *)data error:(NSError *__autoreleasing*)error;
-+ (NSData *)dataByExtractingKeyFromANS1:(NSData *)data error:(NSError *__autoreleasing*)error;
++ (NSData *)dataByExtractingPublicKeyFromANS1:(NSData *)data error:(NSError *__autoreleasing*)error;
++ (NSData *)dataByExtractingPrivateKeyFromANS1:(NSData *)data error:(NSError *__autoreleasing *)error;
 @end
+
+@interface JWTCryptoSecurity__ASN1__Coder : NSObject
+@property (copy, nonatomic, readonly, class) NSString *parametersKeyPrivateKeyData;
+@property (copy, nonatomic, readonly, class) NSString *parametersKeyPublicKeyData;
+//+ (NSDictionary *)decodedItemsFromData:(NSData *)data error:(NSError *__autoreleasing*)error;
++ (NSDictionary *)decodedItemsFromData:(NSData *)data isPublic:(BOOL)isPublic error:(NSError *__autoreleasing*)error;
+@end
+
+@interface JWTCryptoSecurity__ASN1__Coder_2 : JWTCryptoSecurity__ASN1__Coder @end
