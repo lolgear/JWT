@@ -9,6 +9,7 @@
 #import "JWTCryptoKey.h"
 #import "JWTCryptoSecurity.h"
 #import "JWTBase64Coder.h"
+#import "JWT_ASN1_Coding.h"
 @interface JWTCryptoKeyBuilder()
 + (NSString *)keyTypeRSA;
 + (NSString *)keyTypeEC;
@@ -264,20 +265,26 @@
         if (builder.withKeyTypeEC) {
             SecKeyRef privateKeyRef = NULL;
             {
-                // try decode.
-                NSData *privateKeyData = [JWTCryptoSecurity__ASN1__Coder decodedItemsFromData:theData isPublic:NO error:nil][[JWTCryptoSecurity__ASN1__Coder parametersKeyPrivateKeyData]];
-                NSError *thisError = nil;
-                SecKeyRef ref = NULL;
-                if (privateKeyData) {
-                    ref = [JWTCryptoSecurity addKeyWithData:privateKeyData asPublic:NO tag:self.tag type:[self extractedSecKeyTypeWithParameters:parameters] error:&thisError];
-                }
-                if (!thisError && ref) {
-                    // ok!
-                    privateKeyRef = ref;
-                    theData = privateKeyData;
-                }
-                NSLog(@"thisError: %@ SecKeyRef: %@", thisError, ref);
+                // try decode by asn1 coder.
+                NSError *theError = nil;
+                NSArray *items = [[[JWT__ASN1__Coder alloc] parsedData:theData error:&theError] items];
+                NSLog(@"items: %@", [items valueForKey:@"debugDescription"]);
             }
+//            {
+//                // try decode.
+//                NSData *privateKeyData = [JWTCryptoSecurity__ASN1__Coder decodedItemsFromData:theData isPublic:NO error:nil][[JWTCryptoSecurity__ASN1__Coder parametersKeyPrivateKeyData]];
+//                NSError *thisError = nil;
+//                SecKeyRef ref = NULL;
+//                if (privateKeyData) {
+//                    ref = [JWTCryptoSecurity addKeyWithData:privateKeyData asPublic:NO tag:self.tag type:[self extractedSecKeyTypeWithParameters:parameters] error:&thisError];
+//                }
+//                if (!thisError && ref) {
+//                    // ok!
+//                    privateKeyRef = ref;
+//                    theData = privateKeyData;
+//                }
+//                NSLog(@"thisError: %@ SecKeyRef: %@", thisError, ref);
+//            }
             // cheat and shit!
             // ahaha. try to find correct key here.
             // possible soultion - dataByExtracting in cryptoKeySecurity.

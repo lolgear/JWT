@@ -68,7 +68,7 @@
         (__bridge NSString*)kSecAttrKeyClass : keyClass,
         (__bridge NSString*)kSecAttrKeySizeInBits : @(sizeInBits)
     };
-    
+
     if (SecKeyCreateWithData != NULL) {
         CFErrorRef createError = NULL;
         SecKeyRef key = SecKeyCreateWithData((__bridge CFDataRef)data, (__bridge CFDictionaryRef)attributes, &createError);
@@ -130,7 +130,7 @@
 + (void)removeKeyByTag:(NSString *)tag error:(NSError *__autoreleasing*)error; {
     NSData *tagData = [tag dataUsingEncoding:NSUTF8StringEncoding];
     if (tagData == nil) {
-        // tell that nothing to remove.        
+        // tell that nothing to remove.
         return;
     }
     NSDictionary *removeAttributes = @{
@@ -220,13 +220,13 @@
     NSArray *matches = [expression matchesInString:content options:0 range:NSMakeRange(0, content.length)];
     NSTextCheckingResult *result = matches.firstObject;
     NSArray *resultArray = @[];
-    
+
     if (result) {
         for (NSUInteger i = 1; i < result.numberOfRanges; ++i) {
             NSString *extractedString = [content substringWithRange:[result rangeAtIndex:i]];
             resultArray = [resultArray arrayByAddingObject:extractedString];
         }
-        
+
         // here we should remove all new line separators from all lines.
         NSArray *strippedItems = @[];
         for (NSString *item in resultArray) {
@@ -249,12 +249,12 @@
     NSURL *fileURL = [[NSBundle bundleForClass:self.class] URLForResource:name withExtension:@"pem"];
     NSError *error = nil;
     NSString *fileContent = [NSString stringWithContentsOfURL:fileURL encoding:NSUTF8StringEncoding error:&error];
-    
+
     if (error) {
         NSLog(@"%@ error: %@", self.debugDescription, error);
         return nil;
     }
-    
+
     return [self itemsFromPemFileContent:fileContent byRegex:expression];
 }
 + (NSString *)stringByRemovingPemHeadersFromString:(NSString *)string {
@@ -512,13 +512,13 @@ typedef NS_ENUM(NSInteger, JWTPublicHeaderStrippingError) {
         return nil;
     }
     // look for 03 42 00 04
-    
+
     int8_t bytesToSearchFor[] = {0x03, 0x42, 0x00, 0x04};
     int count = sizeof(bytesToSearchFor) / sizeof(bytesToSearchFor[0]);
     NSData *dataToSearchFor = [NSData dataWithBytes:bytesToSearchFor length:count];
     NSRange fullRange = NSMakeRange(0, data.length);
     NSRange foundRange = [data rangeOfData:dataToSearchFor options:0 range:fullRange];
-    
+
     NSData *foundData = nil;
     if (foundRange.location != NSNotFound && foundRange.length != 0) {
         // try to extract tail of data.
@@ -538,14 +538,14 @@ typedef NS_ENUM(NSInteger, JWTPublicHeaderStrippingError) {
         return nil;
     }
     // look for 03 42 00 04
-    
+
     // take items BEFORE this.
     int8_t bytesToSearchFor[] = {0x03, 0x42, 0x00, 0x04};
     int count = sizeof(bytesToSearchFor) / sizeof(bytesToSearchFor[0]);
     NSData *dataToSearchFor = [NSData dataWithBytes:bytesToSearchFor length:count];
     NSRange fullRange = NSMakeRange(0, data.length);
     NSRange foundRange = [data rangeOfData:dataToSearchFor options:0 range:fullRange];
-    
+
     NSData *foundData = data;
     if (foundRange.location != NSNotFound && foundRange.length != 0) {
         // try to extract tail of data.
@@ -559,223 +559,5 @@ typedef NS_ENUM(NSInteger, JWTPublicHeaderStrippingError) {
     }
     // also try to remove public header.
     return foundData;
-}
-@end
-
-#import <Security/SecAsn1Coder.h>
-#import <Security/SecAsn1Templates.h>
-#import <Security/SecAsn1Types.h>
-
-/* AlgorithmIdentifier : SecAsn1AlgId */
-const SecAsn1Template kSecAsn1AlgorithmIDTemplate[] = {
-    { SEC_ASN1_SEQUENCE,
-        0, NULL, sizeof(SecAsn1AlgId) },
-    { SEC_ASN1_OBJECT_ID,
-        offsetof(SecAsn1AlgId,algorithm), },
-    { SEC_ASN1_OPTIONAL | SEC_ASN1_ANY,
-        offsetof(SecAsn1AlgId,parameters), },
-    { 0, }
-};
-
-/* SubjectPublicKeyInfo : SecAsn1PubKeyInfo */
-const SecAsn1Template kSecAsn1SubjectPublicKeyInfoTemplate[] = {
-    { SEC_ASN1_SEQUENCE,
-        0, NULL, sizeof(SecAsn1PubKeyInfo) },
-    { SEC_ASN1_INLINE,
-        offsetof(SecAsn1PubKeyInfo,algorithm),
-        kSecAsn1AlgorithmIDTemplate },
-    { SEC_ASN1_BIT_STRING,
-        offsetof(SecAsn1PubKeyInfo,subjectPublicKey), },
-    { 0, }
-};
-
-typedef struct {
-    SecAsn1Item        version;
-    SecAsn1Item        privateKey;
-    SecAsn1Item        params;        /* optional, ANY */
-    SecAsn1Item        pubKey;        /* BITSTRING, optional */
-} JWT_ECDSA_PrivateKey;
-
-const SecAsn1Template kSecAsn1ECDSAPrivateKeyInfoTemplate[] = {
-    { SEC_ASN1_SEQUENCE, 0, NULL, sizeof(JWT_ECDSA_PrivateKey) },
-    { SEC_ASN1_INTEGER, offsetof(JWT_ECDSA_PrivateKey,version) },
-    { SEC_ASN1_OCTET_STRING, offsetof(JWT_ECDSA_PrivateKey,privateKey) },
-    { SEC_ASN1_OPTIONAL | SEC_ASN1_CONSTRUCTED | SEC_ASN1_EXPLICIT | SEC_ASN1_CONTEXT_SPECIFIC | 0,
-        offsetof(JWT_ECDSA_PrivateKey,params), kSecAsn1AnyTemplate},
-    { SEC_ASN1_OPTIONAL | SEC_ASN1_CONSTRUCTED | SEC_ASN1_EXPLICIT | SEC_ASN1_CONTEXT_SPECIFIC | 1,
-        offsetof(JWT_ECDSA_PrivateKey,pubKey), kSecAsn1BitStringTemplate },
-    { 0, }
-};
-
-typedef struct {
-    SecAsn1Item version;
-    SecAsn1AlgId algorithm;
-    JWT_ECDSA_PrivateKey privateKey;
-} JWT_ECDSA_SubjectPrivateKey;
-
-const SecAsn1Template kSecAsn1SubjectPrivateKeyInfoTemplate[] = {
-    { SEC_ASN1_SEQUENCE,
-        0, NULL, sizeof(JWT_ECDSA_SubjectPrivateKey) },
-    { SEC_ASN1_INLINE,
-        offsetof(JWT_ECDSA_SubjectPrivateKey, algorithm),
-        kSecAsn1AlgorithmIDTemplate },
-    { SEC_ASN1_OCTET_STRING, offsetof(JWT_ECDSA_SubjectPrivateKey, privateKey), kSecAsn1ECDSAPrivateKeyInfoTemplate},
-    { 0, }
-};
-
-@implementation JWTCryptoSecurity__ASN1__Coder
-
-// good exapmle.
-//typedef struct {
-//    size_t          length;
-//    unsigned char   *data;
-//} ASN1_Data;
-//
-//typedef struct {
-//    ASN1_Data type;     // INTEGER
-//    ASN1_Data version;  // INTEGER
-//    ASN1_Data value;    // OCTET STRING
-//} RVNReceiptAttribute;
-//
-//typedef struct {
-//    RVNReceiptAttribute **attrs;
-//} RVNReceiptPayload;
-//
-//// ASN.1 receipt attribute template
-//static const SecAsn1Template kReceiptAttributeTemplate[] = {
-//    { SEC_ASN1_SEQUENCE, 0, NULL, sizeof(RVNReceiptAttribute) },
-//    { SEC_ASN1_INTEGER, offsetof(RVNReceiptAttribute, type), NULL, 0 },
-//    { SEC_ASN1_INTEGER, offsetof(RVNReceiptAttribute, version), NULL, 0 },
-//    { SEC_ASN1_OCTET_STRING, offsetof(RVNReceiptAttribute, value), NULL, 0 },
-//    { 0, 0, NULL, 0 }
-//};
-//
-//// ASN.1 receipt template set
-//static const SecAsn1Template kSetOfReceiptAttributeTemplate[] = {
-//    { SEC_ASN1_SET_OF, 0, kReceiptAttributeTemplate, sizeof(RVNReceiptPayload) },
-//    { 0, 0, NULL, 0 }
-//};
-
-+ (NSString *)parametersKeyPrivateKeyData {
-    return NSStringFromSelector(_cmd);
-}
-+ (NSString *)parametersKeyPublicKeyData {
-    return NSStringFromSelector(_cmd);
-}
-+ (NSData *)dataFromASN1Data:(CSSM_DATA)asn1 maxLength:(CSSM_SIZE)length {
-    if (asn1.Length == 0) {
-        return nil;
-    }
-    return [NSData dataWithBytes:asn1.Data length:MIN(asn1.Length, length)];
-}
-+ (NSData *)dataFromASN1Data:(CSSM_DATA)asn1 {
-    if (asn1.Length == 0) {
-        return nil;
-    }
-    return [NSData dataWithBytes:asn1.Data length:asn1.Length];
-}
-+ (NSData *)publicKeyFromASN1:(CSSM_DATA)asn1 {
-    // subject is bit string
-    // last index here is:
-    size_t scale = CHAR_BIT; // count of bits in byte.
-    size_t newLength = asn1.Length / scale;
-    NSData *data = [self dataFromASN1Data:asn1 maxLength:newLength];
-    return data;
-}
-+ (NSData *)publicKeyFromASN1PublicKey:(SecAsn1PubKeyInfo)asn1 {
-    NSData *data = [self publicKeyFromASN1:asn1.subjectPublicKey];
-    return data;
-}
-+ (NSData *)publicKeyFromASN1PrivateKey:(JWT_ECDSA_PrivateKey)asn1 {
-    return [self publicKeyFromASN1:asn1.pubKey];
-}
-+ (NSData *)privateKeyFromASN1PrivateKey:(JWT_ECDSA_PrivateKey)asn1 {
-    return [self dataFromASN1Data:asn1.privateKey];
-}
-//+ (NSData *)privateKeyFromANS1:(SecAsn1PubKeyInfo)asn1 {
-//    // a bit harder!
-//    //
-//    NSData *parameters = [self dataFromASN1Data:asn1.algorithm.parameters];
-//    NSData *algorithm = [self dataFromASN1Data:asn1.algorithm.algorithm];
-//    NSMutableData *result = [[NSData data] mutableCopy];
-//    if (!parameters || !algorithm) {
-//        return nil;
-//    }
-//    [result appendData:parameters];
-//    [result appendData:algorithm];
-//    return result;
-//}
-+ (NSDictionary *)decodedItemsFromData:(NSData *)data isPublic:(BOOL)isPublic error:(NSError *__autoreleasing*)error {
-    if (data == nil) {
-        return nil;
-    }
-    SecAsn1CoderRef coder = NULL;
-    OSStatus status = SecAsn1CoderCreate(&coder);
-    if (status != errSecSuccess) {
-        if (error) {
-            *error = [NSError errorWithDomain:NSOSStatusErrorDomain code:status userInfo:nil];
-        }
-        return nil;
-    }
-    
-    NSData *publicKeyData = nil;
-    NSData *privateKeyData = nil;
-    NSError *decodeError = nil;
-    
-    NSLog(@"parse data: %@", data);
-    
-    if (isPublic) {
-        SecAsn1PubKeyInfo info = { 0 };
-        OSStatus status = SecAsn1Decode(coder, data.bytes, data.length, kSecAsn1SubjectPublicKeyInfoTemplate, &info);
-        decodeError = [NSError errorWithDomain:NSOSStatusErrorDomain code:status userInfo:nil];
-        if (decodeError.code == errSecSuccess) {
-            publicKeyData = [self publicKeyFromASN1PublicKey:info];
-        }
-    }
-    else {
-        JWT_ECDSA_PrivateKey info = { 0 };
-        OSStatus status = SecAsn1Decode(coder, data.bytes, data.length, kSecAsn1ECDSAPrivateKeyInfoTemplate, &info);
-        decodeError = [NSError errorWithDomain:NSOSStatusErrorDomain code:status userInfo:nil];
-        if (decodeError.code == errSecSuccess) {
-            publicKeyData = [self publicKeyFromASN1PrivateKey:info];
-            privateKeyData = [self privateKeyFromASN1PrivateKey:info];
-        }
-    }
-    
-    if (decodeError.code == errSecSuccess) {
-        NSMutableDictionary *result = [@{} mutableCopy];
-        if (publicKeyData) {
-            result[self.parametersKeyPublicKeyData] = publicKeyData;
-        }
-        if (privateKeyData) {
-            result[self.parametersKeyPrivateKeyData] = privateKeyData;
-        }
-        NSLog(@"result: %@", result);
-        return result;
-    }
-    
-    if (decodeError.code != errSecSuccess) {
-        if (decodeError.code == errSecDecode) {
-            NSLog(@"Not decoded! %@", decodeError);
-        }
-        NSLog(@"error: %@", decodeError);
-        if (error) {
-            *error = decodeError;
-        }
-    }
-    return nil;
-}
-
-@end
-@implementation JWTCryptoSecurity__ASN1__Coder_2
-+ (NSDictionary *)decodedItemsFromData:(NSData *)data isPublic:(BOOL)isPublic error:(NSError *__autoreleasing*)error {
-    NSDictionary *result = [super decodedItemsFromData:data isPublic:isPublic error:error];
-    
-    if (!result) {
-        // we should try to extract public key first.
-        NSData *thePublicKey = [JWTCryptoSecurity dataByExtractingPublicKeyFromANS1:data error:error];
-        NSData *thePrivateKey = [JWTCryptoSecurity dataByExtractingPrivateKeyFromANS1:data error:error];
-    }
-    return nil;
 }
 @end
