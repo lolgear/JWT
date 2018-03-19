@@ -165,19 +165,28 @@
         }
         
         if (builder.withKeyTypeEC) {
+            NSData *theData = [data copy];
+            SecKeyRef privateKeyRef = NULL;
+            JWT__ASN1__Coder *coder = [JWT__ASN1__Coder new];
             {
-                // try decode.
-                NSData *privateKeyData = [JWTCryptoSecurity__ASN1__Coder decodedItemsFromData:data isPublic:YES error:nil][[JWTCryptoSecurity__ASN1__Coder parametersKeyPublicKeyData]];
-                NSError *thisError = nil;
-                SecKeyRef ref;
-                if (privateKeyData) {
-                    ref = [JWTCryptoSecurity addKeyWithData:privateKeyData asPublic:YES tag:self.tag type:[self extractedSecKeyTypeWithParameters:parameters] error:&thisError];
-                }
-                if (!thisError && ref) {
-                    // ok!
-                }
-                NSLog(@"thisError: %@ SecKeyRef: %@", thisError, ref);
+                // try decode by asn1 coder.
+                NSError *theError = nil;
+                NSArray *items = [[coder parsedData:theData error:&theError] items];
+                NSLog(@"items: %@", [items valueForKey:@"debugInformation"]);
             }
+//            {
+//                // try decode.
+//                NSData *privateKeyData = [JWTCryptoSecurity__ASN1__Coder decodedItemsFromData:data isPublic:YES error:nil][[JWTCryptoSecurity__ASN1__Coder parametersKeyPublicKeyData]];
+//                NSError *thisError = nil;
+//                SecKeyRef ref;
+//                if (privateKeyData) {
+//                    ref = [JWTCryptoSecurity addKeyWithData:privateKeyData asPublic:YES tag:self.tag type:[self extractedSecKeyTypeWithParameters:parameters] error:&thisError];
+//                }
+//                if (!thisError && ref) {
+//                    // ok!
+//                }
+//                NSLog(@"thisError: %@ SecKeyRef: %@", thisError, ref);
+//            }
             
             NSError *theError = nil;
             keyData = [JWTCryptoSecurity dataByExtractingPublicKeyFromANS1:data error:&theError];

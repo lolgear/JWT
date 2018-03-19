@@ -237,8 +237,8 @@ typedef NS_ENUM(NSInteger, JWT__ASN1__Entry__Type) {
 
     // additional
     JWT__ASN1__Entry__Type__CONSTRUCTED       = 0x20,
-    JWT__ASN1__Entry__Type__GROUP             = 0x02000,
-    JWT__ASN1__Entry__Type__SEQUENCE__OF      = JWT__ASN1__Entry__Type__SEQUENCE | JWT__ASN1__Entry__Type__GROUP,
+//    JWT__ASN1__Entry__Type__GROUP             = 0x02000,
+//    JWT__ASN1__Entry__Type__SEQUENCE__OF      = JWT__ASN1__Entry__Type__SEQUENCE | JWT__ASN1__Entry__Type__GROUP,
     JWT__ASN1__Entry__Type__SEQUENCE__CONSTRUCTED = JWT__ASN1__Entry__Type__SEQUENCE | JWT__ASN1__Entry__Type__CONSTRUCTED
 
 };
@@ -265,8 +265,8 @@ typedef NS_ENUM(NSInteger, JWT__ASN1__Entry__Type) {
                                          @(JWT__ASN1__Entry__Type__UTF8_STRING) : @"JWT__ASN1__Entry__Type__UTF8_STRING",
                                          @(JWT__ASN1__Entry__Type__SEQUENCE) : @"JWT__ASN1__Entry__Type__SEQUENCE",
                                          @(JWT__ASN1__Entry__Type__CONSTRUCTED) : @"JWT__ASN1__Entry__Type__CONSTRUCTED",
-                                         @(JWT__ASN1__Entry__Type__GROUP) : @"JWT__ASN1__Entry__Type__GROUP",
-                                         @(JWT__ASN1__Entry__Type__SEQUENCE__OF) : @"JWT__ASN1__Entry__Type__SEQUENCE__OF",
+//                                         @(JWT__ASN1__Entry__Type__GROUP) : @"JWT__ASN1__Entry__Type__GROUP",
+//                                         @(JWT__ASN1__Entry__Type__SEQUENCE__OF) : @"JWT__ASN1__Entry__Type__SEQUENCE__OF",
                                          @(JWT__ASN1__Entry__Type__SEQUENCE__CONSTRUCTED) : @"JWT__ASN1__Entry__Type__SEQUENCE__CONSTRUCTED"
                                          });
 }
@@ -290,8 +290,7 @@ typedef NS_ENUM(NSInteger, JWT__ASN1__Entry__Type) {
 @interface JWT__ASN1__Coder__Entry (Accessors)
 @property (assign, nonatomic, readonly) BOOL hasChildren;
 @property (assign, nonatomic, readonly) NSUInteger border;
-@property (assign, nonatomic, readonly) NSData *dataAtItemRange;
-@property (assign, nonatomic, readonly) NSData *dataAtChildrenRange;
+- (NSData *)dataAtRange:(NSRange)range;
 @end
 
 @implementation JWT__ASN1__Coder__Entry
@@ -345,9 +344,11 @@ typedef NS_ENUM(NSInteger, JWT__ASN1__Entry__Type) {
              @"type" : self.type ?: [NSNull null],
              @"typeDescription": [self.class stringForType:self.type],
              @"itemRange": [NSValue valueWithRange:self.itemRange],
-             @"itemData": [self dataAtItemRange] ?: [NSNull null],
+             @"itemData": [self dataAtRange:self.itemRange] ?: [NSNull null],
              @"childrenRange" : [NSValue valueWithRange:self.childrenRange],
-             @"childrenData" : [self dataAtChildrenRange] ?: [NSNull null]
+             @"childrenData" : [self dataAtRange:self.childrenRange] ?: [NSNull null],
+             @"metadataRange" : [NSValue valueWithRange:self.metadataRange],
+             @"metadataData" : [self dataAtRange:self.metadataRange] ?: [NSNull null]
              };
 }
 @end
@@ -359,7 +360,7 @@ typedef NS_ENUM(NSInteger, JWT__ASN1__Entry__Type) {
     BOOL result =
     value == JWT__ASN1__Entry__Type__OCTET_STRING ||
     value == JWT__ASN1__Entry__Type__SEQUENCE ||
-    value == JWT__ASN1__Entry__Type__SEQUENCE__OF ||
+//    value == JWT__ASN1__Entry__Type__SEQUENCE__OF ||
     value == JWT__ASN1__Entry__Type__SEQUENCE__CONSTRUCTED;
     return result;
 }
@@ -369,12 +370,6 @@ typedef NS_ENUM(NSInteger, JWT__ASN1__Entry__Type) {
 
 - (NSData *)dataAtRange:(NSRange)range {
     return [self.coder.data subdataWithRange:range];
-}
-- (NSData *)dataAtItemRange {
-    return [self dataAtRange:self.itemRange];
-}
-- (NSData *)dataAtChildrenRange {
-    return [self dataAtRange:self.childrenRange];
 }
 @end
 
@@ -469,6 +464,7 @@ typedef NS_ENUM(NSInteger, JWT__ASN1__Entry__Type) {
         return;
     }
     item.coder = self;
+    NSLog(@"entry: %@", [item debugInformation]);
     self.items = [self.items ?: @[] arrayByAddingObject:item];
 }
 
@@ -481,6 +477,7 @@ typedef NS_ENUM(NSInteger, JWT__ASN1__Entry__Type) {
         // put into items and start read.
         // assuming that entry is a Sequence.
         [self addItem:entry];
+        int count = 5;
         while (entry != nil && (entry.border != data.length)) {
             //
             // calculate bounds.
@@ -488,6 +485,9 @@ typedef NS_ENUM(NSInteger, JWT__ASN1__Entry__Type) {
             NSRange bounds = (NSRange){border, data.length - border};
             entry = [[JWT__ASN1__Coder__Helper__Simple new] parseData:data inBounds:bounds error:error];
             [self addItem:entry];
+            if (!count--) {
+                break;
+            }
         }
     }
 }

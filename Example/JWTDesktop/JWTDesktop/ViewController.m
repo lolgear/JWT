@@ -183,19 +183,19 @@
 //        NSString *privateKey = @"MIGTAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBHkwdwIBAQQgpnX9ZXmgLCWQ+Hkpvae2PLU68XEzJdp+NjswuBS9RHWgCgYIKoZIzj0DAQehRANCAARMSO6bkKjLT+9Mx9wJRXoqUx+CbeOhAbVGS+3fgvVNGv3QM3NlMou3uguMrITwVvpWjuocXbSzjTwMstMMjsZg";
 //        [self signWithESKey:privateKey];
 //    }
-    
-    {
-        NSString *privateKey = @"MHcCAQEEIA8psOaEu6n1SvOXBCyjkDXkWzX+hptNeNiZgtJ9RRGboAoGCCqGSM49AwEHoUQDQgAE/P6z/08kaIfmyJQZhjmGMIP4QEwuVHlmO3ztd5S5LOLw4lSlo/3xTFMMmLFyy1delAoFJAMWzbPoI5GJQYmIWQ";
-        [self signWithESKey:privateKey];
-    }
-    
-    // we should retrieve RAW bit content.
-    // passed, ok.
-    // IT IS Public key.
+
+    // PrivateKey ( ec256-private.pem )
 //    {
-//        NSString *publicKey = @"MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE/P6z/08kaIfmyJQZhjmGMIP4QEwuVHlmO3ztd5S5LOLw4lSlo/3xTFMMmLFyy1delAoFJAMWzbPoI5GJQYmIWQ";
-//        [self verifyWithESKey:publicKey];
+//        NSString *privateKey = @"MHcCAQEEIA8psOaEu6n1SvOXBCyjkDXkWzX+hptNeNiZgtJ9RRGboAoGCCqGSM49AwEHoUQDQgAE/P6z/08kaIfmyJQZhjmGMIP4QEwuVHlmO3ztd5S5LOLw4lSlo/3xTFMMmLFyy1delAoFJAMWzbPoI5GJQYmIWQ";
+//        [self signWithESKey:privateKey];
 //    }
+    
+    // PublicKey ec256-public.pem
+    // we should retrieve RAW bit-string content.
+    {
+        NSString *publicKey = @"MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE/P6z/08kaIfmyJQZhjmGMIP4QEwuVHlmO3ztd5S5LOLw4lSlo/3xTFMMmLFyy1delAoFJAMWzbPoI5GJQYmIWQ";
+        [self verifyWithESKey:publicKey];
+    }
 }
 - (void)verifyWithESKey:(NSString *)key {
     NSError *error = nil;
@@ -272,8 +272,8 @@
 }
 
 - (void)test {
-//    [self signWithES];
-    [self trueSignAndVerify];
+    [self signWithES];
+//    [self trueSignAndVerify];
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
