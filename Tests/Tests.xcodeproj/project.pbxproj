@@ -69,8 +69,6 @@
 		0ABF607F211497B200222F2D /* Certificates.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0A5B450D210DB9EF0027A234 /* Certificates.xcassets */; };
 		0AD2D62D21130F9D00104C72 /* JWT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0AD2D61B21130F6100104C72 /* JWT.framework */; };
 		0AD2D62E21130FC900104C72 /* JWT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0AD2D61B21130F6100104C72 /* JWT.framework */; };
-		0AD2D6522113141D00104C72 /* MF_Base64Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AD2D64B2113141D00104C72 /* MF_Base64Additions.m */; };
-		0AD2D6532113167D00104C72 /* MF_Base64Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AD2D64B2113141D00104C72 /* MF_Base64Additions.m */; };
 		0AD2D66C2114900B00104C72 /* JWTAlgorithmAsymmetricTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A5B450F210DBDDB0027A234 /* JWTAlgorithmAsymmetricTests.m */; };
 		0AD2D66D2114901200104C72 /* JWTAlgorithmHSTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A5B4511210DC0860027A234 /* JWTAlgorithmHSTests.m */; };
 		0AD2D66E2114901200104C72 /* JWTAlgorithmNoneTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A5B4513210DCB7A0027A234 /* JWTAlgorithmNoneTests.m */; };
@@ -82,7 +80,6 @@
 		0AE4FFA52663C85D00431728 /* JWTClaimsCustomClaimsBaseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AE4FFA22663C78400431728 /* JWTClaimsCustomClaimsBaseTests.m */; };
 		0AE4FFA62663C85D00431728 /* JWTClaimsCustomClaimsBaseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AE4FFA22663C78400431728 /* JWTClaimsCustomClaimsBaseTests.m */; };
 		EC0B56772358C9FC002EB309 /* JWTReadmeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A5B4517210DD82E0027A234 /* JWTReadmeTests.m */; };
-		EC0B56782358C9FC002EB309 /* MF_Base64Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AD2D64B2113141D00104C72 /* MF_Base64Additions.m */; };
 		EC0B56792358C9FC002EB309 /* JWTTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A5B4515210DD81E0027A234 /* JWTTests.m */; };
 		EC0B567A2358C9FC002EB309 /* JWTAlgorithmAsymmetricTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A5B450F210DBDDB0027A234 /* JWTAlgorithmAsymmetricTests.m */; };
 		EC0B567B2358C9FC002EB309 /* JWTIssuesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A5B4519210DD83B0027A234 /* JWTIssuesTests.m */; };
@@ -182,8 +179,6 @@
 		0A883A8D266D660500DAF016 /* watchOS_Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = watchOS_Tests.m; sourceTree = "<group>"; };
 		0A883A8F266D660500DAF016 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0AD2D61121130F6100104C72 /* JWT.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = JWT.xcodeproj; path = ../Framework/JWT.xcodeproj; sourceTree = "<group>"; };
-		0AD2D64A2113141D00104C72 /* MF_Base64Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MF_Base64Additions.h; sourceTree = "<group>"; };
-		0AD2D64B2113141D00104C72 /* MF_Base64Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MF_Base64Additions.m; sourceTree = "<group>"; };
 		0AE4FFA22663C78400431728 /* JWTClaimsCustomClaimsBaseTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JWTClaimsCustomClaimsBaseTests.m; sourceTree = "<group>"; };
 		EC0B56932358C9FC002EB309 /* tvOS_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = tvOS_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EC0B56962358DC8B002EB309 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = tvOS_Tests/Info.plist; sourceTree = "<group>"; };
@@ -228,7 +223,6 @@
 		045147281D5E2F93007B1D7A = {
 			isa = PBXGroup;
 			children = (
-				0AD2D63E2113141D00104C72 /* Base64 */,
 				0AD2D61121130F6100104C72 /* JWT.xcodeproj */,
 				04857DD91E4DD77D0036CC3A /* Resources */,
 				045147641D5E310E007B1D7A /* Tests */,
@@ -377,16 +371,6 @@
 			children = (
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		0AD2D63E2113141D00104C72 /* Base64 */ = {
-			isa = PBXGroup;
-			children = (
-				0AD2D64A2113141D00104C72 /* MF_Base64Additions.h */,
-				0AD2D64B2113141D00104C72 /* MF_Base64Additions.m */,
-			);
-			name = Base64;
-			path = ../Dependencies/Base64/Base64;
 			sourceTree = "<group>";
 		};
 		EC0B56952358DC6E002EB309 /* tvOS_Tests */ = {
@@ -630,7 +614,6 @@
 			files = (
 				0AE4FFA32663C78400431728 /* JWTClaimsCustomClaimsBaseTests.m in Sources */,
 				0A5B4518210DD82E0027A234 /* JWTReadmeTests.m in Sources */,
-				0AD2D6522113141D00104C72 /* MF_Base64Additions.m in Sources */,
 				0A5B4516210DD81E0027A234 /* JWTTests.m in Sources */,
 				0A5B4510210DBDDB0027A234 /* JWTAlgorithmAsymmetricTests.m in Sources */,
 				0A5B451A210DD83B0027A234 /* JWTIssuesTests.m in Sources */,
@@ -646,7 +629,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				0AE4FFA52663C85D00431728 /* JWTClaimsCustomClaimsBaseTests.m in Sources */,
-				0AD2D6532113167D00104C72 /* MF_Base64Additions.m in Sources */,
 				0AD2D66E2114901200104C72 /* JWTAlgorithmNoneTests.m in Sources */,
 				0AD2D6712114915200104C72 /* JWTTests.m in Sources */,
 				0AD2D66D2114901200104C72 /* JWTAlgorithmHSTests.m in Sources */,
@@ -681,7 +663,6 @@
 			files = (
 				0AE4FFA62663C85D00431728 /* JWTClaimsCustomClaimsBaseTests.m in Sources */,
 				EC0B56772358C9FC002EB309 /* JWTReadmeTests.m in Sources */,
-				EC0B56782358C9FC002EB309 /* MF_Base64Additions.m in Sources */,
 				EC0B56792358C9FC002EB309 /* JWTTests.m in Sources */,
 				EC0B567A2358C9FC002EB309 /* JWTAlgorithmAsymmetricTests.m in Sources */,
 				EC0B567B2358C9FC002EB309 /* JWTIssuesTests.m in Sources */,
