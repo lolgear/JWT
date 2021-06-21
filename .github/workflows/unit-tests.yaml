@@ -36,5 +36,5 @@ jobs:
       - uses: actions/checkout@v2
       - run: gem install xcpretty --no-document
       - run: set -o pipefail
-      - run: ./Scripts/ci-select-xcode.sh
+      - run: ./Scripts/ci-xcode-select.sh
       - run: xcodebuild test -project 'Tests/Tests.xcodeproj' -scheme ${{ matrix.scheme }} -sdk ${{ matrix.sdk }} -destination ${{ matrix.destination }} | xcpretty -c

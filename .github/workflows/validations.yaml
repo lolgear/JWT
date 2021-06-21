@@ -16,7 +16,7 @@ jobs:
       - uses: actions/checkout@v2
       - run: gem install xcpretty --no-document
       - run: set -o pipefail
-      - run: ./Scripts/ci-select-xcode.sh
+      - run: ./Scripts/ci-xcode-select.sh
       # cocoapods
       - run: pod lib lint --allow-warnings
       # also add validation for spm later.
