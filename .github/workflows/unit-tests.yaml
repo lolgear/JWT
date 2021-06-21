@@ -17,7 +17,7 @@ jobs:
   caution:
     runs-on:  macos-latest
     steps:
-      -run: echo "Enable watchOS tests when Xcode 12.5 and macOS 11 will be available at Github Actions."
+      - run: echo "Enable watchOS tests when Xcode 12.5 and macOS 11 will be available at Github Actions."
   xcode:
     runs-on: macos-latest
     strategy:
