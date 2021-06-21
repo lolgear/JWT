@@ -14,6 +14,10 @@ env:
   LANG: en_US.UTF-8
 
 jobs:
+  caution:
+    runs-on:  macos-latest
+    steps:
+      -run: echo "Enable watchOS tests when Xcode 12.5 and macOS 11 will be available at Github Actions."
   xcode:
     runs-on: macos-latest
     strategy:
@@ -28,9 +32,10 @@ jobs:
           - scheme: tvOS_Tests
             sdk: appletvsimulator
             destination: 'platform=tvOS Simulator,name=Apple TV,OS=latest'
-          - scheme: watchOS_Tests
-            sdk: watchsimulator
-            destination: 'platform=watchOS Simulator,name=Apple Watch Series 6 - 44mm,OS=latest'
+          # Enable tests when Xcode 12.5 and macOS 11 will be available at Github Actions.
+          # - scheme: watchOS_Tests
+          #   sdk: watchsimulator
+          #   destination: 'platform=watchOS Simulator,name=Apple Watch Series 6 - 44mm,OS=latest'
 
     steps:
       - uses: actions/checkout@v2
