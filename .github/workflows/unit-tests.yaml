@@ -34,7 +34,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+        with:
+          submodules: recursive
       - run: gem install xcpretty --no-document
-      - run: set -o pipefail
       - run: ./Scripts/ci-xcode-select.sh
-      - run: xcodebuild test -project 'Tests/Tests.xcodeproj' -scheme ${{ matrix.scheme }} -sdk ${{ matrix.sdk }} -destination ${{ matrix.destination }} | xcpretty -c
+      - run: xcodebuild test -project 'Tests/Tests.xcodeproj' -scheme ${{ matrix.scheme }} -sdk ${{ matrix.sdk }} -destination ${{ matrix.destination }} | xcpretty && exit ${PIPESTATUS[0]}
