@@ -173,8 +173,6 @@
 		0A80CF892109113D00D5499C /* ec256.csr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ec256.csr; sourceTree = "<group>"; };
 		0A80CF8A2109113D00D5499C /* ec256.p12 */ = {isa = PBXFileReference; lastKnownFileType = file; path = ec256.p12; sourceTree = "<group>"; };
 		0A80CF93210912D300D5499C /* ec256-cer.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "ec256-cer.pem"; sourceTree = "<group>"; };
-		0A883A77266D640500DAF016 /* watchOS_Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = watchOS_Tests.m; sourceTree = "<group>"; };
-		0A883A79266D640500DAF016 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0A883A8B266D660500DAF016 /* watchOS_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = watchOS_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0A883A8D266D660500DAF016 /* watchOS_Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = watchOS_Tests.m; sourceTree = "<group>"; };
 		0A883A8F266D660500DAF016 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -229,7 +227,6 @@
 				045147351D5E2FF0007B1D7A /* iOS_Tests */,
 				045147411D5E3004007B1D7A /* macOS_Tests */,
 				EC0B56952358DC6E002EB309 /* tvOS_Tests */,
-				0A883A76266D640500DAF016 /* watchOS_Tests */,
 				0A883A8C266D660500DAF016 /* watchOS_Tests */,
 				045147341D5E2FF0007B1D7A /* Products */,
 				0AD2D62C21130F9D00104C72 /* Frameworks */,
@@ -337,15 +334,6 @@
 				0A80CF8A2109113D00D5499C /* ec256.p12 */,
 			);
 			path = ec;
-			sourceTree = "<group>";
-		};
-		0A883A76266D640500DAF016 /* watchOS_Tests */ = {
-			isa = PBXGroup;
-			children = (
-				0A883A77266D640500DAF016 /* watchOS_Tests.m */,
-				0A883A79266D640500DAF016 /* Info.plist */,
-			);
-			path = watchOS_Tests;
 			sourceTree = "<group>";
 		};
 		0A883A8C266D660500DAF016 /* watchOS_Tests */ = {
