@@ -7,7 +7,7 @@
 //
 
 #import <JWT/JWTCryptoSecurity+ErrorHandling.h>
-#import <JWTDeprecations.h>
+#import <JWT/JWTDeprecations.h>
 
 @implementation JWTCryptoSecurity (ErrorHandling)
 + (NSError *)securityErrorWithOSStatus:(OSStatus)status {
